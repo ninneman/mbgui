@@ -34,6 +34,7 @@ class App(tk.Frame):
         self.showWidgets()
 
     def get_type_states(self):
+        """Return the output type list as a dictionary of booleans."""
         result = {}
         for k, v in self.outtypes.items():
             number = v.get()
@@ -44,12 +45,14 @@ class App(tk.Frame):
         return result
 
     def convert(self):
+        """Convert the input file to the output type(s)."""
         print("converting: {0}".format(self.infile.get()))
         print("destination: {0}".format(self.outdir.get()))
         print("output types: {0}".format(self.get_type_states()))
         return None
 
     def get_input_file(self):
+        """Pop up the 'open file' dialog, and assign whatever's picked to the input file entry box."""
         options = {
             "title": "Select file",
         }
@@ -59,6 +62,7 @@ class App(tk.Frame):
         return None
 
     def get_output_dir(self):
+        """Pop up the 'open directory' dialog, and assign whatever's picked to the output directory entry box."""
         options = {
             "title": "Select directory",
         }
@@ -68,6 +72,7 @@ class App(tk.Frame):
         return None
 
     def showWidgets(self):
+        """Lay out the various widgets."""
         tk.Label(self, text = "Input file:").grid(row = 0)
         self.infile.grid(row = 1, column = 0)
         tk.Button(self, text = "Browse...", command = self.get_input_file).grid(row = 1, column = 1)
