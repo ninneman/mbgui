@@ -1,0 +1,5 @@
+ls -1 *.mb41 > tmplist
+mbdatalist -F -1 -I tmplist -V > datalist
+mbdatalist -F -1 -I datalist -N -V
+mblist -F -1 -I datalist -D2> output.txt
+
