@@ -38,6 +38,7 @@ class App(tk.Frame):
         }
         self.grid()
         self.showWidgets()
+        self.cmd_env = {"PATH": "{0}:{1}".format(mbs_bin_dir, os.environ["PATH"])}
 
     def get_type_states(self):
         """Return the output type list as a dictionary of booleans."""
@@ -50,20 +51,40 @@ class App(tk.Frame):
                 result[k] = False
         return result
 
+    def quote(self, string):
+        """Wrap a string in double quotes."""
+        return "\"" + string + "\""
+
     def convert(self):
         """Convert the input file to the output type(s)."""
 
-        mbdatalist = os.path.join(mbs_bin_dir, "mbdatalist")
-        mblist = os.path.join(mbs_bin_dir, "mblist")
         for selector in self.input_selectors:
             outfile_base, _ = os.path.splitext(os.path.basename(selector))
             outfile_full_base = os.path.join(self.outdir.get(), outfile_base)
             datalist = outfile_full_base + ".datalist"
             final_output = outfile_full_base + ".txt"
             print("converting {0} to {1}".format(selector, final_output))
-            subprocess.call([mbdatalist, "-F", "0", "-I", selector, ">", datalist,])
-            subprocess.call([mbdatalist, "-F", "-1", "-I", datalist, "-N",])
-            subprocess.call([mblist, "-F", "-1", "-I", datalist, "-D2", "-X", final_output,])
+            #logfile = open("log", "w")
+            with open(datalist, "w") as dlf:
+                subprocess.call(
+                    ["mbdatalist", "-F", "0", "-I", selector],
+                    stdout = dlf,
+                    stderr = None,
+                    env = self.cmd_env
+                )
+            subprocess.call(
+                ["mbdatalist", "-F", "-1", "-I", datalist, "-N"],
+                stdout = None,
+                stderr = None,
+                env = self.cmd_env
+            )
+            subprocess.call(
+                ["mblist", "-F", "-1", "-I", datalist, "-D2", "-X", final_output],
+                stdout = None,
+                stderr = None,
+                env = self.cmd_env
+            )
+            #logfile.close()
             
         return None
 
