@@ -2,7 +2,8 @@
 
 # mbgui: a GUI front-end to a subset of MB-System functionality.
 
-# <copyright info here>
+# Copyright 2014, The Federation of Earth Science Information Partners.
+# Written and designed by Jason Ninneman and Kelly Monteleone.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
