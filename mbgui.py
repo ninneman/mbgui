@@ -118,9 +118,9 @@ class App(tk.Frame):
         self.outdir.grid(row = 3, column = 0)
         tk.Button(self, text = "Browse...", command = self.get_output_dir).grid(row = 3, column = 1)
         tk.Label(self, text = "Output types:").grid(row = 4)
-        tk.Checkbutton(self, text = "xyz", variable = self.outtypes["xyz"]).grid(row = 5, column = 0)
-        tk.Checkbutton(self, text = "ascii", variable = self.outtypes["ascii"]).grid(row = 5, column = 1)
-        tk.Checkbutton(self, text = "GeoTIFF", variable = self.outtypes["geotiff"]).grid(row = 5, column = 2)
+        #tk.Checkbutton(self, text = "xyz", variable = self.outtypes["xyz"]).grid(row = 5, column = 0)
+        #tk.Checkbutton(self, text = "ascii", variable = self.outtypes["ascii"]).grid(row = 5, column = 1)
+        #tk.Checkbutton(self, text = "GeoTIFF", variable = self.outtypes["geotiff"]).grid(row = 5, column = 2)
         tk.Button(self, text = "Quit", command = self.quit).grid(row = 6, column = 0)
         tk.Button(self, text = "Convert", command = self.convert).grid(row = 6, column = 1)
 
