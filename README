@@ -7,3 +7,5 @@ mbgui is a simple graphical user interface around a subset of the MB-System comm
 mbdatalist -F 0 -I <some swath file> > <data list file>
 mbdatalist -F -1 -I <data list file> -N
 mblist -F -1 -I <data list file> -D2 -X <text output>
+
+mbgui is written in Python, so there is no complilation or build process as such. It requires both Python 3 and MB-System to run. The file mbgui.py contains a variable called mbs_bin_dir, which points to the path where the MB-System binaries live. Change it for your installation.
