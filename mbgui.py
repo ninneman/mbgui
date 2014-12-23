@@ -26,6 +26,7 @@ import os
 import subprocess
 import tempfile
 import platform
+import sys
 
 class App(tk.Frame):
     def __init__(self, master = None):
@@ -33,11 +34,12 @@ class App(tk.Frame):
         self.infile = tk.Entry(self)
         self.outdir = tk.Entry(self)
         self.input_selectors = None
-        self.outtypes = {
-            "xyz": tk.IntVar(),
-            "ascii": tk.IntVar(),
-            "geotiff": tk.IntVar(),
-        }
+        #self.outtypes = {
+        #    "ascii": tk.IntVar(),
+        #    "txt": tk.IntVar(),
+        #    "xyz": tk.IntVar(),
+        #}
+        self.txttype = tk.StringVar(),
         self.grid()
         self.showWidgets()
         self.cmd_env = {"PATH": "{0}:{1}".format(mbs_bin_dir, os.environ["PATH"])}
@@ -64,7 +66,7 @@ class App(tk.Frame):
             outfile_base, _ = os.path.splitext(os.path.basename(selector))
             outfile_full_base = os.path.join(self.outdir.get(), outfile_base)
             datalist = outfile_full_base + ".datalist"
-            final_output = outfile_full_base + ".txt"
+            final_output = outfile_full_base + "." + self.txttype[0].get()
             print("converting {0} to {1}".format(selector, final_output))
             #logfile = open("log", "w")
             if platform.system() == "Windows":
@@ -123,10 +125,11 @@ class App(tk.Frame):
         tk.Label(self, text = "Output directory:").grid(row = 2)
         self.outdir.grid(row = 3, column = 0)
         tk.Button(self, text = "Browse...", command = self.get_output_dir).grid(row = 3, column = 1)
-        tk.Label(self, text = "Output types:").grid(row = 4)
-        #tk.Checkbutton(self, text = "xyz", variable = self.outtypes["xyz"]).grid(row = 5, column = 0)
-        #tk.Checkbutton(self, text = "ascii", variable = self.outtypes["ascii"]).grid(row = 5, column = 1)
-        #tk.Checkbutton(self, text = "GeoTIFF", variable = self.outtypes["geotiff"]).grid(row = 5, column = 2)
+        tk.Label(self, text = "Output type:").grid(row = 4)
+        tk.Radiobutton(self, text = "ascii", variable = self.txttype, value = "ascii").grid(row = 5, column = 0)
+        tk.Radiobutton(self, text = "txt", variable = self.txttype, value = "txt").grid(row = 5, column = 1)
+        tk.Radiobutton(self, text = "xyz", variable = self.txttype, value = "xyz").grid(row = 5, column = 2)
+        
         tk.Button(self, text = "Quit", command = self.quit).grid(row = 6, column = 0)
         tk.Button(self, text = "Convert", command = self.convert).grid(row = 6, column = 1)
 
