@@ -25,6 +25,7 @@ import tkinter.filedialog as tkfd
 import os
 import subprocess
 import tempfile
+import platform
 
 class App(tk.Frame):
     def __init__(self, master = None):
@@ -66,21 +67,25 @@ class App(tk.Frame):
             final_output = outfile_full_base + ".txt"
             print("converting {0} to {1}".format(selector, final_output))
             #logfile = open("log", "w")
+            if platform.system() == "Windows":
+                suffix = ".exe"
+            else:
+                suffix = ""
             with open(datalist, "w") as dlf:
                 subprocess.call(
-                    ["mbdatalist", "-F", "0", "-I", selector],
+                    ["mbdatalist" + suffix, "-F", "0", "-I", selector],
                     stdout = dlf,
                     stderr = None,
                     env = self.cmd_env
                 )
             subprocess.call(
-                ["mbdatalist", "-F", "-1", "-I", datalist, "-N"],
+                ["mbdatalist" + suffix, "-F", "-1", "-I", datalist, "-N"],
                 stdout = None,
                 stderr = None,
                 env = self.cmd_env
             )
             subprocess.call(
-                ["mblist", "-F", "-1", "-I", datalist, "-D2", "-X", final_output],
+                ["mblist" + suffix, "-F", "-1", "-I", datalist, "-D2", "-X", final_output],
                 stdout = None,
                 stderr = None,
                 env = self.cmd_env
