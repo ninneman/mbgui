@@ -34,14 +34,9 @@ class App(tk.Frame):
         self.infile = tk.Entry(self)
         self.outdir = tk.Entry(self)
         self.input_selectors = None
-        #self.outtypes = {
-        #    "ascii": tk.IntVar(),
-        #    "txt": tk.IntVar(),
-        #    "xyz": tk.IntVar(),
-        #}
         self.txttype = tk.StringVar()
         self.txttype.set("txt")
-        self.grid()
+        self.pack(fill = tk.X, expand = True)
         self.showWidgets()
         self.cmd_env = {"PATH": "{0}:{1}".format(mbs_bin_dir, os.environ["PATH"])}
 
@@ -120,20 +115,23 @@ class App(tk.Frame):
 
     def showWidgets(self):
         """Lay out the various widgets."""
-        tk.Label(self, text = "Input file:").grid(row = 0)
-        self.infile.grid(row = 1, column = 0)
-        tk.Button(self, text = "Browse...", command = self.get_input_files).grid(row = 1, column = 1)
-        tk.Label(self, text = "Output directory:").grid(row = 2)
-        self.outdir.grid(row = 3, column = 0)
-        tk.Button(self, text = "Browse...", command = self.get_output_dir).grid(row = 3, column = 1)
-        tk.Label(self, text = "Output type:").grid(row = 4)
-        tk.Radiobutton(self, text = "ascii", variable = self.txttype, value = "ascii").grid(row = 5, column = 0)
-        tk.Radiobutton(self, text = "txt", variable = self.txttype, value = "txt").grid(row = 5, column = 1)
-        tk.Radiobutton(self, text = "xyz", variable = self.txttype, value = "xyz").grid(row = 5, column = 2)
-
         
-        tk.Button(self, text = "Quit", command = self.quit).grid(row = 6, column = 0)
-        tk.Button(self, text = "Convert", command = self.convert).grid(row = 6, column = 1)
+        tk.Label(self, text = "Input file:").grid(row = 0, column = 0, sticky = tk.E)
+        self.infile.grid(row = 0, column = 1, sticky = tk.W + tk.E)
+        tk.Button(self, text = "Browse...", command = self.get_input_files).grid(row = 0, column = 2)
+        
+        tk.Label(self, text = "Output directory:").grid(row = 1, column = 0, sticky = tk.E)
+        self.outdir.grid(row = 1, column = 1, sticky = tk.W + tk.E)
+        tk.Button(self, text = "Browse...", command = self.get_output_dir).grid(row = 1, column = 2)
+        
+        tk.Label(self, text = "Output type:").grid(row = 2, column = 0, sticky = tk.E)
+        tk.Radiobutton(self, text = "ascii", variable = self.txttype, value = "ascii").grid(row = 2, column = 1)
+        tk.Radiobutton(self, text = "txt", variable = self.txttype, value = "txt").grid(row = 2, column = 2)
+        tk.Radiobutton(self, text = "xyz", variable = self.txttype, value = "xyz").grid(row = 2, column = 3)
+        
+        tk.Button(self, text = "Quit", command = self.quit).grid(row = 3, column = 0)
+        tk.Button(self, text = "Convert", command = self.convert).grid(row = 3, column = 1)
+        self.grid_columnconfigure(1, weight = 1)
 
 root = tk.Tk()
 app = App(master = root)
