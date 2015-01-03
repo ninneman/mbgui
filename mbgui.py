@@ -39,7 +39,8 @@ class App(tk.Frame):
         #    "txt": tk.IntVar(),
         #    "xyz": tk.IntVar(),
         #}
-        self.txttype = tk.StringVar(),
+        self.txttype = tk.StringVar()
+        self.txttype.set("txt")
         self.grid()
         self.showWidgets()
         self.cmd_env = {"PATH": "{0}:{1}".format(mbs_bin_dir, os.environ["PATH"])}
@@ -129,6 +130,7 @@ class App(tk.Frame):
         tk.Radiobutton(self, text = "ascii", variable = self.txttype, value = "ascii").grid(row = 5, column = 0)
         tk.Radiobutton(self, text = "txt", variable = self.txttype, value = "txt").grid(row = 5, column = 1)
         tk.Radiobutton(self, text = "xyz", variable = self.txttype, value = "xyz").grid(row = 5, column = 2)
+
         
         tk.Button(self, text = "Quit", command = self.quit).grid(row = 6, column = 0)
         tk.Button(self, text = "Convert", command = self.convert).grid(row = 6, column = 1)
