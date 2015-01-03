@@ -62,7 +62,7 @@ class App(tk.Frame):
             outfile_base, _ = os.path.splitext(os.path.basename(selector))
             outfile_full_base = os.path.join(self.outdir.get(), outfile_base)
             datalist = outfile_full_base + ".datalist"
-            final_output = outfile_full_base + "." + self.txttype[0].get()
+            final_output = outfile_full_base + "." + self.txttype.get()
             print("converting {0} to {1}".format(selector, final_output))
             #logfile = open("log", "w")
             if platform.system() == "Windows":
