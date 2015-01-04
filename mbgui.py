@@ -33,6 +33,9 @@ class App(tk.Frame):
         tk.Frame.__init__(self, master)
         self.infile = tk.Entry(self)
         self.outdir = tk.Entry(self)
+        self.prefix = tk.Entry(self)
+        self.prefix.delete(0, tk.END)
+        self.prefix.insert(0, "output_file")
         self.input_selectors = None
         self.txttype = tk.StringVar()
         self.txttype.set("txt")
@@ -58,37 +61,41 @@ class App(tk.Frame):
     def convert(self):
         """Convert the input file to the output type(s)."""
 
+        # write source file list
+        source_list = open("source.list", "w")
         for selector in self.input_selectors:
-            outfile_base, _ = os.path.splitext(os.path.basename(selector))
-            outfile_full_base = os.path.join(self.outdir.get(), outfile_base)
-            datalist = outfile_full_base + ".datalist"
-            final_output = outfile_full_base + "." + self.txttype.get()
-            print("converting {0} to {1}".format(selector, final_output))
-            #logfile = open("log", "w")
-            if platform.system() == "Windows":
-                suffix = ".exe"
-            else:
-                suffix = ""
-            with open(datalist, "w") as dlf:
-                subprocess.call(
-                    ["mbdatalist" + suffix, "-F", "0", "-I", selector],
-                    stdout = dlf,
-                    stderr = None,
-                    env = self.cmd_env
-                )
+            source_list.write(selector + "\n")
+        source_list.close()
+
+        final_output = self.prefix.get() + "." + self.txttype.get()
+        if platform.system() == "Windows":
+            suffix = ".exe"
+        else:
+            suffix = ""
+
+        # write MB-System-format datalist
+        with open("data.list", "w") as dlf:
             subprocess.call(
-                ["mbdatalist" + suffix, "-F", "-1", "-I", datalist, "-N"],
-                stdout = None,
+                ["mbdatalist" + suffix, "-F", "-1", "-I", "source.list"],
+                stdout = dlf,
                 stderr = None,
                 env = self.cmd_env
             )
-            subprocess.call(
-                ["mblist" + suffix, "-F", "-1", "-I", datalist, "-D2", "-X", final_output],
-                stdout = None,
-                stderr = None,
-                env = self.cmd_env
-            )
-            #logfile.close()
+        os.unlink("source.list")
+        
+        subprocess.call(
+            ["mbdatalist" + suffix, "-F", "-1", "-I", "data.list", "-N"],
+            stdout = None,
+            stderr = None,
+            env = self.cmd_env
+        )
+        subprocess.call(
+            ["mblist" + suffix, "-F", "-1", "-I", "data.list", "-D2", "-X", final_output],
+            stdout = None,
+            stderr = None,
+            env = self.cmd_env
+        )
+        os.unlink("data.list")
             
         return None
 
@@ -123,14 +130,17 @@ class App(tk.Frame):
         tk.Label(self, text = "Output directory:").grid(row = 1, column = 0, sticky = tk.E)
         self.outdir.grid(row = 1, column = 1, sticky = tk.W + tk.E)
         tk.Button(self, text = "Browse...", command = self.get_output_dir).grid(row = 1, column = 2)
+
+        tk.Label(self, text = "Output file prefix:").grid(row = 2, column = 0, sticky = tk.E)
+        self.prefix.grid(row = 2, column = 1, sticky = tk.W + tk.E)
         
-        tk.Label(self, text = "Output type:").grid(row = 2, column = 0, sticky = tk.E)
-        tk.Radiobutton(self, text = "ascii", variable = self.txttype, value = "ascii").grid(row = 2, column = 1)
-        tk.Radiobutton(self, text = "txt", variable = self.txttype, value = "txt").grid(row = 2, column = 2)
-        tk.Radiobutton(self, text = "xyz", variable = self.txttype, value = "xyz").grid(row = 2, column = 3)
+        tk.Label(self, text = "Output type:").grid(row = 3, column = 0, sticky = tk.E)
+        tk.Radiobutton(self, text = "ascii", variable = self.txttype, value = "ascii").grid(row = 3, column = 1)
+        tk.Radiobutton(self, text = "txt", variable = self.txttype, value = "txt").grid(row = 3, column = 2)
+        tk.Radiobutton(self, text = "xyz", variable = self.txttype, value = "xyz").grid(row = 3, column = 3)
         
-        tk.Button(self, text = "Quit", command = self.quit).grid(row = 3, column = 0)
-        tk.Button(self, text = "Convert", command = self.convert).grid(row = 3, column = 1)
+        tk.Button(self, text = "Quit", command = self.quit).grid(row = 4, column = 0)
+        tk.Button(self, text = "Convert", command = self.convert).grid(row = 4, column = 1)
         self.grid_columnconfigure(1, weight = 1)
 
 root = tk.Tk()
