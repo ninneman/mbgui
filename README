@@ -4,7 +4,7 @@ Copyright 2014, The Federation of Earth Science Information Partners.
 Written and designed by Jason Ninneman <jsn@mbar.us> and Kelly Monteleone.
 
 mbgui is a simple graphical user interface around a subset of the MB-System command line tools. Currently, its only function is to produce a text dump of swath data. The following command sequence is carried out:
-mbdatalist -F 0 -I <some swath file> > <data list file>
+mbdatalist -F -1 -I <list of input files> > <data list file>
 mbdatalist -F -1 -I <data list file> -N
 mblist -F -1 -I <data list file> -D2 -X <text output>
 
